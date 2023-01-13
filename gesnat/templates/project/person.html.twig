@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+{% form_theme formPerson 'bootstrap_4_layout.html.twig' %}
+
+
+{% block title %}GESNAT - PERSON{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">Création Personne</h5>
+                                    <legend class="text margin-top-5"></legend>
+
+                                    {{ form_start(formPerson) }}
+
+                                    {{ form_row(formPerson.name) }}
+                                    {{ form_row(formPerson.lastName) }}
+                                    {{ form_row(formPerson.city, {'attr': {'placeholder': "Sélectionner la ville"}}) }}
+                                    {{ form_row(formPerson.neighborhood, {'attr': {'placeholder': "Sélectionner le quartier"}}) }}
+                                    <button type="submit" class="btn btn-success">Enregistrer la consultation</button>
+
+                                   {{ form_end(formPerson) }}
+
+                                         <ul>
+                                            <li>
+                                                <a href="#">Back to the list</a>
+                                            </li>
+                                        </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#appbundle_person_city').change(function () {
+            var citySelector = $(this);
+            
+            // Request the neighborhoods of the selected city.
+            $.ajax({
+                url: "{{ path('person_list_neighborhoods') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    cityid: citySelector.val()
+                },
+                success: function (neighborhoods) {
+                    var neighborhoodSelect = $("#appbundle_person_neighborhood");
+
+                    // Remove current options
+                    neighborhoodSelect.html('');
+                    
+                    // Empty value ...
+                    neighborhoodSelect.append('<option value> Select a neighborhood of ' + citySelector.find("option:selected").text() + ' ...</option>');
+                    
+                    
+                    $.each(neighborhoods, function (key, neighborhood) {
+                        neighborhoodSelect.append('<option value="' + neighborhood.id + '">' + neighborhood.name + '</option>');
+                    });
+                },
+                error: function (err) {
+                    alert("An error ocurred while loading data ...");
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

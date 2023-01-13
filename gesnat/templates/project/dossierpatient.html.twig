@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>DOSSIER PATIENT</title>
+    </head>
+    <body>
+    <h4>Fiche du patient {{ p.nompat }}</h4>
+         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Identifiant</th>
+                                                                    <th>Nom</th>
+                                                                    <th>Sexe</th>
+                                                                    <th>Fonction</th>
+                                                                    <th>Contact</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for p in patients %}
+                                                                <tr>
+                                                                    <td>{{ p.id }}</td>
+                                                                    <td> {{ p.nompat }} </td>
+                                                                    <td> {{ p.fonctionpat }} </td>
+                                                                    <td> {{ p.telephonepat }} </td>
+                                                                    
+                                                                    
+                                                                </tr>
+                                                                {% else %}
+                                                                    <tr><td>Aucun patient enregistré</td></tr>
+                                                                {% endfor %}
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    </div>
+    </body>
+</html>

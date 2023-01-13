@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+{% form_theme formConsultation 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}GESNAT - CONSULTATION{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">Nouvelle Consultation</h5>
+                                    <legend class="text margin-top-5"></legend>
+                                    <form action="{{ path('new_consultation') }}" method="post" class="form-horizontal">
+                                    {{ form_start(formConsultation) }}
+
+                                    {{ form_row(formConsultation.patient) }}
+                                    {{ form_row(formConsultation.praticien) }}
+                                    {{ form_row(formConsultation.motif, {'attr': {'placeholder': "Motif de la consultation"}}) }}
+                                    {{ form_row(formConsultation.examen, {'attr': {'placeholder': "Examen médical"}}) }}
+                                    {{ form_row(formConsultation.diagnostic, {'attr': {'placeholder': "Diagnostic"}}) }}
+                                    {{ form_row(formConsultation.observation, {'attr': {'placeholder': "Observation et CAT"}}) }}
+
+                                    <div class="pull-right margin-top-20">
+                                            <a onclick="effacerform('form1','nompatient')" class="btn btn-secondary">
+                                                Annuler
+                                                <i class="fa fa-refresh position-right"></i>
+                                            </a>
+
+                                            <button type="submit" value="Enregistrer" name="bt" class="btn btn-success">
+                                                Enregistrer la consultation
+                                                <i class="fa fa-arrow-right position-right"></i>
+                                            </button>
+                                    </div>
+
+                                   {{ form_end(formConsultation) }}
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+
+<script type="text/javascript">
+
+// Effacer formulaire 
+function effacerform (idform, firstinput) {
+  $(':input','#'+idform)
+   .val('')
+   .removeAttr('checked')
+   .removeAttr('selected');
+
+   $('input[name='+firstinput+']').focus();
+}
+
+</script>
+
+
+
+{% endblock %}

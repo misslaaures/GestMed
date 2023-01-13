@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}GESNAT - FACTURE{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">FACTURE</h5>
+                                    <legend class="text margin-top-5"></legend>
+                                    <form action="{{ path('facturation') }}" method="post" class="form-horizontal">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <tbody>    
+                                                                <tr>
+                                                                    <td>Facture Numéro : {{numc}}</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        {{ form_row(formFacture.patient, {'attr': {'placeholder': "Sélectionner le patient"}}) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Désignation</th>
+                                                                    <th>Qte</th>
+                                                                    <th>Remise</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{ form_widget(formFacturation.produit, {'attr': {'placeholder': "Sélectionner le produit"}}) }}</td>
+                                                                    <td>{{ form_widget(formFacturation.qteP) }}</td>
+                                                                    <td>{{ form_widget(formFacturation.rem) }}</td>
+                                                                    <td><button type="submit" value="Ajouter" name="bt" class="btn btn-primary">Ajouter</button></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Numéro</th>
+                                                                    <th>Désignation</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Qte</th>
+                                                                    <th>Montant</th>
+                                                                    <th>Remise</th>
+                                                                    <th>Montant après remise</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% set i=0 %}
+                                                            {% for t in lcomm %}
+                                                            {% set i=i+1 %}
+                                                                <tr>
+                                                                    <td>{{ i }}</td>
+                                                                    <td>{{ t.produit.designation }}</td>
+                                                                    <td>{{ t.produit.prix }}</td>
+                                                                    <td>{{ t.qteP }}</td>
+                                                                    <td>{{ t.produit.prix * t.qteP }}</td>
+                                                                    <td>{{ (((t.produit.prix * t.qteP) * t.rem) * 0.01) }} </td>
+                                                                    <td>{{ (t.produit.prix * t.qteP) - (((t.produit.prix * t.qteP) * t.rem) * 0.01) }}</td>
+                                                                    <td><a onclick="{{ path('remove', {'id': i}) }}" class="btn btn-outline-danger btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> 
+                                                                    </td>
+                                                                    {% set mtt = mtt + (t.produit.prix * t.qteP) - (((t.produit.prix * t.qteP) * t.rem) * 0.01) %}
+                                                                </tr>
+                                                                {%endfor%}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="7" class="text-right">Total :</td>
+                                                                    <td>{{ mtt }}</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                            
+                                                        </table>
+                                                        <button type="submit" name="bt" value="Editer" class="btn btn-primary">Editer la facture</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+<script type="text/javascript">
+function remove(id){
+
+    var url="{{path('remove')}}";
+
+    $.ajax({//envoi de requete ajax
+        url      : url,//chargement de l'url associé au lien
+        cache    : false,
+        type: "POST",//envoi de requete ajax de type post
+        data : 'id=' + id,
+        dataType : "json",//format de données de type json
+        error    : function(request, error) { // Info Debuggage si erreur   
+                     alert("Erreur : responseText: "+request.responseText);
+                   },
+        success  : function(data) {  //si succès
+            
+                if (data.res==true)
+                {
+                     // Supprimer ligne Datable
+                     
+                     var table  = $('#tableau').DataTable();
+                     table.row($('#'+id).parents('tr')).remove().draw();
+              
+                }
+           }       
+        }) ;
+
+    });
+            
+};
+</script>
+ 
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+{% endblock %}

@@ -1,0 +1,288 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GESNAT - PRODUIT{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">Gestion des produits</h5>
+                                    <legend class="text-bold margin-top-30">Informations</legend>
+                                    <form action="{{ path('enregistrer_produit') }}" method="post" class="form-horizontal" id="form1">
+                                        <div class="row">
+                                            <input type="hidden" class="form-control" name="produitid">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label col-form-label">Désignation</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="designation" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label col-form-label">Prix</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="prix" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label col-form-label">Catégorie</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <select name="type" id="type" class="form-control"  required>
+                                                            <option value="">Sélectionner</option>
+                                                            {% for c in categories %}
+                                                                <option value="{{ c.id }}">{{ c.titre }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="col-md-6">
+                                                
+                                                <div class="form-group row">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label col-form-label">Quantité en stock</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="qtestock" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label col-form-label">Stock minimal</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="stockmini" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="pull-right margin-top-20">
+                                            <a onclick="effacerform('form1','designation')" class="btn btn-secondary">
+                                                Annuler
+                                                <i class="fa fa-refresh position-right"></i>
+                                            </a>
+
+                                            <button type="submit" class="btn btn-primary">
+                                                Enregistrer
+                                                <i class="fa fa-arrow-right position-right"></i>
+                                            </button>
+                                        </div>
+                                            </div>
+
+                                        </div>
+
+                                        <legend class="text-bold margin-top-30">Liste des produits</legend>
+                                          <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Désignation</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Qte en stock</th>
+                                                                    <th>Stock mini</th>
+                                                                    <th>Catégorie</th>
+                                                                    <th>Date</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for p in produits %}
+                                                                <tr>
+                                                                    <td>{{ p.id }}</td>
+                                                                    <td> {{ p.designation }} </td>
+                                                                    <td> {{ p.prix }} </td>
+                                                                    <td> {{ p.qtestock }} </td>
+                                                                    <td> {{ p.stockmini }} </td>
+                                                                    <td>{{ p.categorie.titre }}</td>
+                                                                    <td>{{ p.datemodif|date('d-m-Y') }}</td>
+                                                                    <td>
+                                                                    <a onclick="afficher('{{ p.id }}');" class="btn btn-outline-warning btn-rounded"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                                    
+                                                                    <a id="{{ p.id }}" onclick="supprimer('{{ p.id }}', '{{ p.designation }}')" class="btn btn-outline-danger btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> 
+                                                                    </td>
+                                                                </tr>
+                                                                {% else %}
+                                                                    <tr><td>Aucun produit créé</td></tr>
+                                                                {% endfor %}
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+
+<script type="text/javascript">
+
+// Effacer formulaire 
+function effacerform (idform, firstinput) {
+  $(':input','#'+idform)
+   .val('')
+   .removeAttr('checked')
+   .removeAttr('selected');
+
+   $('input[name='+firstinput+']').focus();
+}
+
+function afficher(id)
+{
+    
+    var url="{{ path('afficher_produit') }}";
+
+    $.ajax({//envoi de requete ajax
+        url      : url,//chargement de l'url associé au lien
+        cache    : false,
+        type: "POST",//envoi de requete ajax de type post
+        data : 'id=' + id,
+        dataType : "json",//format de données de type json
+        error    : function(request, error) { // Info Debuggage si erreur   
+                     alert("Erreur : responseText: "+request.responseText);
+                   },
+        success  : function(data) {  //si succès
+            
+            $('input[name=produitid]').val(data.id);
+            $('input[name=designation]').val(data.designation);
+            $('input[name=prix]').val(data.prix);
+            $('input[name=qtestock]').val(data.qtestock);
+            $('input[name=stockmini]').val(data.stockmini);
+
+            if (data.categorieid==null)
+            {
+               $('#type').prop('selectedIndex',0);
+            }
+            else
+            {
+                $('#type option[value="'+data.categorieid+'"]').remove();
+                $('#type').append('<option value="'+ data.categorieid +'" selected>'+ data.categorietitre +'</option>');
+            }
+
+           }       
+   }) ;
+    
+}
+
+function deleteItem() {
+    if (confirm("Are you sure?")) {
+        // your deletion code
+    }
+    return false;
+}
+
+function supprimer(id, libelle) {
+
+    swal({
+        title: "Etes-vous sure de vouloir supprimer le produit : "+libelle+" ?",
+        text: "",
+        // type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Supprimer"
+    },
+    function () {
+
+    var url="{{ path('supprimer_produit') }}";
+
+    $.ajax({//envoi de requete ajax
+        url      : url,//chargement de l'url associé au lien
+        cache    : false,
+        type: "POST",//envoi de requete ajax de type post
+        data : 'id=' + id,
+        dataType : "json",//format de données de type json
+        error    : function(request, error) { // Info Debuggage si erreur   
+                     alert("Erreur : responseText: "+request.responseText);
+                   },
+        success  : function(data) {  //si succès
+            
+                if (data.res==true)
+                {
+                     // Supprimer ligne Datable
+                     var row = $('#'+id).closest('tr');
+                     var table  = $('#tableau').DataTable();
+                     table.row(row).remove().draw(false);
+                }
+
+           }       
+        }) ;
+
+    });
+            
+};
+
+</script>
+
+{% endblock %}

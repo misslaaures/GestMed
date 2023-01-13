@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>{% block title %} GESNAT {% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+
+    {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+    {% endblock %}
+
+</head>
+<body>
+        <!-- NAVBAR -->
+    <nav class="navbar navbar-toggleable-md">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav">
+            <span>
+                <i class="fa fa-code-fork"></i>
+            </span>
+        </button>
+
+        <button class="navbar-toggler navbar-toggler-left" type="button" id="toggle-sidebar">
+            <span>
+               <i class="fa fa-align-justify"></i>
+            </span>
+        </button>
+
+        <a class="navbar-brand logo" href="#">
+            <!-- <img src="{{ asset('assets/assets/img/logo.png') }}" alt="Modish"> -->
+            <h3 style="color: white; font-weight: bold; margin-top: 5px;">GESNAT</h3>
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <button class="sidebar-toggle btn btn-flat" id="toggle-sidebar-desktop">
+                <span>
+                    <i class="fa fa-align-justify"></i>
+                </span>
+            </button>
+            <ul class="navbar-nav ml-auto">
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle dropdown-has-after" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img src="{{ asset('assets/assets/img/default-user.jpg') }}" alt="" class="user-img">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-cog"></i> <span>Modifier password</span></a>
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-sign-out"></i> <span>Se déconnecter</span></a>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- /NAVBAR -->
+
+    <div class="page-container">
+        <div class="page-content">
+            <!-- inject:SIDEBAR -->
+
+            <div id="sidebar-main" class="sidebar sidebar-default">
+    <div class="sidebar-content">
+        <ul class="navigation">
+            <li class="navigation-header">
+                <span>Naturo-Thèrapie</span>
+                <i class="icon-menu"></i>
+            </li>
+
+            <li>
+                <a href="{{ path('project') }}"><i class="fa fa-home"></i> <span>Accueil</span></a>
+            </li>
+
+            <li class="navigation-header">
+                <span>Menus</span>
+                <i class="icon-menu"></i>
+            </li>
+            <li>
+                <a href="{{ path('home_facturation') }}"><i class="fa fa-mouse-pointer"></i> <span>Nouvelle facture</span></a>
+            </li>
+           <li>
+                <a href="#"><i class="fa fa-mouse-pointer"></i> <span>Consultation</span></a>
+                <ul>
+                    <li><a href="{{ path('home_consultation') }}">Nouvelle consultation</a></li>
+                    <!-- <li><a href="{{ path('consulter_dossier_patient') }}">Détails Consultation</a></li> -->
+                    <li><a href="{{ path('voir_consultation_home') }}">Dossier Patient</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-th"></i> <span>Paramètres</span></a>
+                <ul>
+                    <li><a href="{{ path('home_patient') }}">Patients</a></li>
+                    <li><a href="{{ path('home_praticien') }}">Praticiens</a></li>
+                    <li><a href="{{ path('home_produit') }}">Produits</a></li>
+                    <li><a href="{{ path('home_categorie') }}">Catégories</a></li>
+                    <li><a href="{{ path('home_acte') }}">Actes</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-th"></i> <span>Gestion des stocks</span></a>
+                <ul>
+                    <li><a href="{{ path('home_entree') }}">Entrée</a></li>
+                    <li><a href="{{ path('home_sortie') }}">Sortie</a></li>
+                </ul>
+            </li>
+             <li>
+                <a href="{{ path('chiffre_home') }}"><i class="fa fa-th"></i> <span>Chiffre d'affaire</span></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-edit"></i> <span>Etats</span></a>
+                <ul>
+                    <li><a href="{{ path('home_listepatients') }}">Liste des patients</a></li>
+                    <li><a href="{{ path('home_listeactes') }}">Liste des actes</a></li>
+                    <li><a href="{{ path('home_listepraticiens') }}">Liste des praticiens</a></li>
+                    <li><a href="{{ path('home_listeproduits') }}">Liste des produits</a></li>
+                    <li><a href="{{ path('home_listeproduitsalerte') }}">Liste des produits alertes</a></li>
+                    
+
+                </ul>
+            </li>
+
+            <li class="navigation-header">
+                <span>Connexion</span>
+                <i class="icon-menu"></i>
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-file-o"></i> <span>Configurations</span></a>
+                <ul>
+                    <li><a href="#">Modifier mot de passe</a></li>
+                    <li><a href="#">Se déconnecter</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+            <!-- inject:/SIDEBAR -->
+ {% block body %}
+ <!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="page-title">C.N.P.O.S LES DEUX MAINS <small>Centre Naturo-Phyto-Ostéopathie</small></h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <img src="{{ asset('assets/assets/img/logonat.jpg') }}" alt="" class="">
+                            </div>
+                        </div>
+                    </div>
+
+{% endblock %}
+
+
+        </div>
+    </div>
+
+
+	{% block javascripts %}
+	<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+	<script type="text/javascript" src="{{ asset('assets/lib/js/chartist.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+	<script type="text/javascript">
+	    $(function() {
+	        // Dashboard Sales Chart
+	        // ------------------------------------------------------------------
+
+	        var dataMain = {
+	            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+	            series: [
+	                [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
+	                [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
+	            ]
+	        };
+
+	        var optionsMain = {
+	            seriesBarDistance: 10
+	        };
+
+	        var responsiveOptionsMain = [
+	            ['screen and (max-width: 640px)', {
+	                seriesBarDistance: 5,
+	                axisX: {
+	                    labelInterpolationFnc: function (value) {
+	                        return value[0];
+	                    }
+	                }
+	            }]
+	        ];
+	        var chart = new Chartist.Bar('.ct-chart-dashboard', dataMain, optionsMain, responsiveOptionsMain);
+	    });
+	</script>
+	{% endblock %}
+
+	</body>
+	        
+</html>

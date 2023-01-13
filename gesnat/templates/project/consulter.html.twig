@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+{% form_theme formConsulter 'bootstrap_4_layout.html.twig' %}
+
+
+{% block title %}GESNAT - CONSULTER{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">Consulter dossier patient</h5>
+                                    <legend class="text margin-top-5"></legend>
+
+                                    {{ form_start(formConsulter) }}
+
+                                    {{ form_row(formConsulter.patient, {'attr': {'placeholder': "Sélectionner le patient"}}) }}
+                                    {{ form_row(formConsulter.consultation, {'attr': {'placeholder': "Sélectionner la consultation"}}) }}
+                                    <button type="submit" value="Visualiser" name="bt" class="btn btn-success">Visualiser</button>
+                                     <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>N° consultation</th>
+                                                                    
+                                                                    <th>Motif</th>
+                                                                    
+                                                                    
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for c in consult %}
+                                                                
+                                                                <tr>
+                                                                    <td>{{patient}}</td>
+                                                                    
+                                                                    <td></td>
+                                                                    
+                                                                </tr>
+                                                                
+                                                                {% else %}
+                                                                <tr><td>Dossier vide !</td></tr>
+                                                               {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{ form_end(formConsulter) }}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#appbundle_consulter_patient').change(function () {
+            var patientSelector = $(this);
+            
+            // Request the consultations of the selected patient.
+            $.ajax({
+                url: "{{ path('consulter_list_consultations') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    patientid: patientSelector.val()
+                },
+                success: function (consultations) {
+                    var consultationSelect = $("#appbundle_consulter_consultation");
+
+                    // Remove current options
+                    consultationSelect.html('');
+                    
+                    // Empty value ...
+                    consultationSelect.append('<option value> Sélectionnez une consultation de ' + patientSelector.find("option:selected").text() + ' ...</option>');
+                    
+                    
+                    $.each(consultations, function (key, consultation) {
+                        consultationSelect.append('<option value="' + consultation.id + '">' + consultation.id + ' ' + consultation.motif + '</option>');
+                    });
+                },
+                error: function (err) {
+                    alert("An error ocurred while loading data ...");
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

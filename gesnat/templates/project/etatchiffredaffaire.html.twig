@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chiffre d'affaire</title>
+        <style>
+            /** Define the margins of your page **/
+            @page {
+                margin: 0cm 0cm;
+            }
+
+            /** Define now the real margins of every page in the PDF **/
+            body {
+                margin-top: 3cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                margin-bottom: 2cm;
+            }
+
+            header {
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                height: 3cm;
+
+                /** Extra personal styles **/
+                background-color: #3C7D30;
+                color: white;
+                text-align: center;
+                line-height: 0.3cm;
+            }
+
+            main {
+                text-align: center;
+            }
+
+            th {
+                text-align: left;
+            }
+
+            footer {
+                position: fixed; 
+                bottom: 0cm; 
+                left: 0cm; 
+                right: 0cm;
+                height: 2cm; 
+               
+            }
+        </style>
+    </head>
+    <body>
+    <!-- Define header and footer blocks before your content -->
+        <header>
+            <h2>  CENTRE  NATURO  PHYTO-OSTEOPATHIE  LES  DEUX  MAINS </h2>
+            <h5>  Adresse : Siège sis derrière le stade de l'amitié immeuble carrelé couleur verte situé entre le centre de santé Seignon et global service </h5>
+            <h5>  Tél : 97 95 00 53 / 95 43 12 76 / 95 86 51 60 (Rép. du Bénin) </h5>
+        </header>
+        <footer>
+               
+        </footer>
+
+        <!-- Wrap the content of your PDF inside a main tag -->
+        <main>
+            <p style="page-break-after: never;">
+    <h4>Chiffre d'affaire du {{ datedebut|date('d-m-Y') }} au {{ datefin|date('d-m-Y') }}</h4>
+         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Identifiant</th>
+                                                                    <th>Date facture</th>
+                                                                    <th>Nom patient</th>
+                                                                    <th>Montant facture</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for f in factures %}
+                                                                {% if (datedebut|date('d-m-Y') <= f.datefact|date('d-m-Y')) and (datefin|date('d-m-Y') >= f.datefact|date('d-m-Y')) %}
+                                                                <tr>
+                                                                    <td>{{ f.id }}</td>
+                                                                    <td> {{ f.datefact|date('d-m-Y') }} </td>
+                                                                    <td> {{ f.patient.nompat }} </td>
+                                                                    <td> {{ f.mtt }} </td>
+                                                                </tr>
+                                                                {% set ca = ca + f.mtt %}
+                                                                {% endif %}
+                                                            {% else %}
+                                                                    <tr><td>Aucun chiffre d'affaire obtenu</td></tr>
+                                                            {% endfor %}
+                                                            
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="3" class="text-right">Chiffre d'affaire total :</td>
+                                                                    <td>{{ ca }}</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    </div>
+            </p>
+        </main>
+    
+    </body>
+   
+</html>

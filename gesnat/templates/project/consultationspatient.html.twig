@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}GESNAT - CONSULTATION{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/assets/css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/css/components.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/assets/icons/fontawesome/styles.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/lib/css/chartist.min.css') }}">
+
+<!-- Sweet Alert Css -->
+<link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
+<!-- PAGE LEVEL STYLESHEETS -->
+<link rel="stylesheet" href="{{ asset('assets/lib/css/jquery.dataTables.min.css') }}">
+<!-- /PAGE LEVEL STYLESHEETS -->
+
+{% endblock %}
+
+{% block body %}
+
+<!-- PAGE CONTENT -->
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="row">
+                    
+                    {% for message in app.flashes('success') %}
+                      <div class="alert alert-success" style="margin:auto; font-weight: bold;">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h5 class="card-title">Dossier Patient</h5>
+                                    <legend class="text margin-top-5"></legend>
+                                    <form action="{{ path('voir_consultation') }}" method="post" class="form-horizontal">
+                                                <div class="form-group row">
+                                                    <div class="col-md-1">
+                                                        <label class="control-label col-form-label">Patient</label>
+                                                    </div>
+                                                    <div class="col-md-11">
+                                                        <select name="type" id="type" class="form-control"  required>
+                                                            <option value="">Sélectionner le patient</option>
+                                                            {% for p in patients %}
+                                                                <option value="{{ p.id }}">{{ p.nompat }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                    
+                                    <div class="pull-right margin-top-20">
+                                            <button type="submit" value="Voir" name="bt" class="btn btn-success">
+                                                Voir les consultations du patient
+                                                <i class="fa fa-arrow-right position-right"></i>
+                                            </button>
+                                    </div>
+                                    
+                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /PAGE CONTENT -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/lib/js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/assets/js/app.min.js') }}"></script>
+
+
+<!-- Sweet Alert Plugin Js -->
+<script src="{{ asset('assets/sweetalert/sweetalert.min.js') }}"></script>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script type="text/javascript" src="{{ asset('assets/lib/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets/js/pages_datatables.min.js') }}"></script>
+<!-- /PAGE LEVEL SCRIPTS -->
+
+
+<script type="text/javascript">
+
+// Effacer formulaire 
+function effacerform (idform, firstinput) {
+  $(':input','#'+idform)
+   .val('')
+   .removeAttr('checked')
+   .removeAttr('selected');
+
+   $('input[name='+firstinput+']').focus();
+}
+
+</script>
+
+
+
+{% endblock %}

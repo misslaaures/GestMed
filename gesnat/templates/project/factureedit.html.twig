@@ -1,0 +1,122 @@
+ <!DOCTYPE html>
+<html>
+ <head>
+        <meta charset="UTF-8">
+        <title>Facture</title>
+           <style>
+            /** Define the margins of your page **/
+            @page {
+                margin: 0cm 0cm;
+            }
+
+            /** Define now the real margins of every page in the PDF **/
+            body {
+                margin-top: 3cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                margin-bottom: 2cm;
+            }
+
+            header {
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                height: 3cm;
+
+                /** Extra personal styles **/
+                background-color: #3C7D30;
+                color: white;
+                text-align: center;
+                line-height: 0.3cm;
+            }
+
+            main {
+                text-align: center;
+            }
+
+            caisse {
+                text-align: right;
+            }
+
+            th {
+                text-align: left;
+            }
+
+            footer {
+                position: fixed; 
+                bottom: 0cm; 
+                left: 0cm; 
+                right: 0cm;
+                height: 2cm; 
+               
+            }
+        </style>
+    </head>
+    <body>
+    <!-- Define header and footer blocks before your content -->
+        <header>
+            <h2>  CENTRE  NATURO  PHYTO-OSTEOPATHIE  LES  DEUX  MAINS </h2>
+            <h5>  Adresse : Siège sis derrière le stade de l'amitié immeuble carrelé couleur verte situé entre le centre de santé Seignon et global service </h5>
+            <h5>  Tél : 97 95 00 53 / 95 43 12 76 / 95 86 51 60 (Rép. du Bénin) </h5>
+        </header>
+        <footer>
+             
+        </footer>
+
+    <h4>Facture N° {{numc}} </h4>
+    <h5>Patient : {{ patient.nompat }} </h5>
+    <h5>Date : {{ datedujour|date('d-m-Y') }} Heure : {{ datedujour|date('H:i:s') }}</h5>
+         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <table class="display datatable table table-stripped" id="tableau" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-right">Désignation</th>
+                                                                    <th class="text-right">Prix</th>
+                                                                    <th class="text-right">Qte</th>
+                                                                    <th>Montant</th>
+                                                                    <th>Remise</th>
+                                                                    <th>Montant après remise</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for t in lcomm %}
+                                                                <tr>
+                                                                    <td class="text-align:center">{{ t.produit.designation }}</td>
+                                                                    <td class="text-align:left">{{ t.produit.prix }}</td>
+                                                                    <td class="text-align:right">{{ t.qteP }}</td>
+                                                                    <td>{{ t.produit.prix * t.qteP }}</td>
+                                                                    <td>{{ (((t.produit.prix * t.qteP) * t.rem) * 0.01) }} </td>
+                                                                    <td>{{ (t.produit.prix * t.qteP) - (((t.produit.prix * t.qteP) * t.rem) * 0.01) }}</td>
+                                                                </tr>
+                                                                {%endfor%}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="5" class="text-align:center">Total :</td>
+                                                                    <td>{{ mtt }}</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                            
+                                                        </table>
+                                                    </div>
+                                                    
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                       
+   
+ </main>
+    
+                <caisse>
+                    <h4>La Caissière</h4>
+                </caisse>
+
+    </body>
+   
+</html>
